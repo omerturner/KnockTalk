@@ -1,0 +1,38 @@
+<div class="card talks cf">
+
+  <div class="textintro">
+    <h1>Add a Talk</h1>
+    <p>Type a talk name and hit +</p>
+  </div><!-- textintro -->
+
+  <form class="formgroup addtalk cf"
+    name="myform"
+    ng-submit="addTalk()"
+    novalidate>
+
+    <div class="inputwrapper">
+      <input type="text" name="talkName"
+      placeholder="Talk name"
+      ng-model="talkName" ng-required="true">
+    </div>
+
+    <button type="submit" class="btn"
+      ng-disabled="myform.$invalid">+</button>
+
+  </form>
+
+  <h2>Your talks</h2>
+  <div class="talk" ng-repeat="(key, talk) in talks">
+    <button class="btn btn-delete tooltip"
+      ng-click="deleteTalk(key)">
+      <span>Delete this talk</span>
+    </button>
+
+    <a class="btn btn-checkin tooltip"
+      href="#/talk/{{currentUser.regUser}}/{{talk.$id}}">
+      <span>View Talk</span></a>
+
+    <span class="text">{{talk.name}}</span>
+  </div>
+
+</div><!-- talks cf -->
