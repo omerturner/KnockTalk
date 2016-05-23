@@ -21,18 +21,25 @@ myApp.controller('TalkController',
     $scope.query = '';
     $scope.recordId='';
 
-
     $scope.addComment = function() {
-      var myData = {
+      var data = {
+        user: $rootScope.currentUser.$id,
         title: $scope.user.title,
         comment: $scope.user.comment,
         date: Firebase.ServerValue.TIMESTAMP
-      }; //myData
+      }; //data
 
-      $scope.comments.$add(myData).then(function() {
+      $scope.comments.$add(data).then(function() {
         console.log('addedComment');
       }); //Send data to Firebase
     }; //AddComment
+
+    $scope.allowEditComment = function (comment) {
+      if ((comment.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)) {
+        return true;
+      }
+      return false;
+    };
 
     $scope.deleteComment = function(id) {
       var refDel = new Firebase(FIREBASE_URL + 'users/' +
@@ -41,11 +48,6 @@ myApp.controller('TalkController',
       var record = $firebaseObject(refDel);
       record.$remove(id);
     };
-
-    $scope.pickRandom = function() {
-      var whichRecord = Math.round(Math.random()* (comments.length - 1));
-      $scope.recordId = comments.$keyAt(whichRecord);
-    }; //pick winner
 
     $scope.showReply = function(myComment) {
       myComment.show = !myComment.show;
@@ -57,23 +59,31 @@ myApp.controller('TalkController',
       }
     }; // show love
 
-    $scope.giveReply = function(myComment, replyText) {
+    $scope.addReply = function(comment, replyText) {
       var refReply = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
-        $scope.whichtalk + '/comments/' + myComment.$id +
+        $scope.whichtalk + '/comments/' + comment.$id +
         '/replies');
       var repliesArray = $firebaseArray(refReply);
 
-      var myData = {
+      var data = {
+        user: $rootScope.currentUser.$id,
         reply: replyText,
         date: Firebase.ServerValue.TIMESTAMP
-      }; //myData
-      repliesArray.$add(myData).then(function() {
-        console.log('giveReply');
+      }; //data
+      repliesArray.$add(data).then(function() {
+        console.log('addReply');
       });
     }; //giveReply
 
-    $scope.deleteReply =function(commentId, reply) {
+    $scope.allowEditReply = function (reply) {
+      if ((reply.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)){
+        return true;
+      }
+      return false;
+    };
+
+    $scope.deleteReply = function(commentId, reply) {
       var refReply = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
         $scope.whichtalk + '/comments/' + commentId +
@@ -82,5 +92,9 @@ myApp.controller('TalkController',
       record.$remove(reply);
     }; //deleteReply
 
+    $scope.pickRandom = function() {
+      var whichRecord = Math.round(Math.random()* (comments.length - 1));
+      $scope.recordId = comments.$keyAt(whichRecord);
+    }; //pick winner
 
 }]); //Controller

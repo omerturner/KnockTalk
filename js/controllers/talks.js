@@ -20,7 +20,6 @@ myApp.controller('TalksController',
           $rootScope.howManyTalks = talksInfo.length;
         });
 
-
         $scope.addTalk = function() {
           talksInfo.$add({
             name: $scope.talkName,

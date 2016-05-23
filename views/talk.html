@@ -73,8 +73,9 @@
     <ul class="userlist cf">
       <li ng-class="comment.userState" ng-repeat="comment in comments | orderBy: order:direction | filter: { $id: recordId, $: query }">
         <div class="comment">
-          <div class="buttons" ng-show="currentUser">
+          <div class="buttons">
             <button class="btn btn-delete tooltip"
+              ng-show="allowEditComment(comment)"
               ng-click="deleteComment(comment.$id)">
               <span>Delete this comment</span>
             </button>
@@ -90,8 +91,9 @@
             </div><!-- date -->
           </div><!-- info -->
           <div class="showcomments" ng-show="comment.show">
-            <form class="cf"
-              ng-submit="giveReply(comment, comment.replyText)"
+            <form name="replyForm"
+              class="cf"
+              ng-submit="addReply(comment, comment.replyText)"
               novalidate>
               <input type="text" name="replyText" placeholder="What do you think?"
               ng-model="comment.replyText" ng-required="true">
@@ -100,11 +102,12 @@
 
             <ul class="awardslist cf">
               <li class="cf" ng-repeat="(key, reply) in comment.replies">
-                <div class="reply">{{ reply.name }}
-                  <div class="buttons" ng-show="currentUser">
+                <div class="reply">{{ reply.reply }}
+                  <div class="buttons">
                     <button class="btn btn-delete award tooltip"
+                      ng-show="allowEditReply(reply)"
                       ng-click="deleteReply(comment.$id, key)">
-                      <span>Delete this award</span>
+                      <span>Delete this reply</span>
                     </button>
                   </div><!-- buttons -->
                 </div><!-- reply -->

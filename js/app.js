@@ -26,11 +26,12 @@ myApp.config(['$routeProvider', function($routeProvider) {
     }).
     when('/talk/:uId/:mId', {
       templateUrl: 'views/talk.html',
-      controller: 'TalkController'
-    }).
-    when('/checkins/:uId/:mId/checkinsList', {
-      templateUrl: 'views/checkinslist.html',
-      controller: 'CheckInsController'
+      controller: 'TalkController',
+      resolve: {
+        currentAuth: function(Authentication) {
+          return Authentication.requireAuth();
+        } //current Auth
+      } //resolve
     }).
     when('/talks', {
       templateUrl: 'views/talks.html',
