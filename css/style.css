@@ -230,11 +230,11 @@ input[type=radio] {
 }
 
 .btn-list { background-image: url(../images/icons/icon_list.png); }
-.btn-checkin { background-color: #859835; background-image: url(../images/icons/icon_checkmark.png); }
+.btn-comment { background-color: #859835; background-image: url(../images/icons/icon_checkmark.png); }
 .btn-delete { background-color: #C94C24; background-image: url(../images/icons/icon_trash.png); }
 .btn-love { background-image: url(../images/icons/icon_heart.png); }
 .btn-email { background-image: url(../images/icons/icon_email.png); }
-.btn-meeting { background-image:  url(../images/icons/icon_meeting.png); }
+.btn-talk { background-image:  url(../images/icons/icon_meeting.png); }
 
 .btn-pick {
   background: #2D8BCF url(../images/icons/icon_dice.png) 5px center no-repeat;
@@ -514,34 +514,34 @@ nav li a:hover {
     width: auto;
 }
 
-.addmeeting {
+.addtalk {
     width:100%;
 }
 
-.addmeeting .inputwrapper {
+.addtalk .inputwrapper {
   margin-right:80px;
 }
 
-.addmeeting .inputwrapper input {
+.addtalk .inputwrapper input {
     float: left;
     width: 100%;
 }
 
-.addmeeting button {
+.addtalk button {
   width: 60px;
   margin-left: 20px;
   vertical-align: center;
 }
 
-.meetings {
+.talks {
   padding-top: 10px;
 }
 
-.meetings h2 {
+.talks h2 {
   padding-bottom: 5px;
 }
 
-.meetings .meeting {
+.talks .talk {
   display: inline-block;
   padding: 10px 20px 10px 15px;
   margin: 3px 10px;
@@ -551,17 +551,17 @@ nav li a:hover {
 
 }
 
-.meetings .meeting .btn {
+.talks .talk .btn {
   margin-right: 4px;
   padding: 1px 8px;
 }
 
-.meetings .meeting .text {
+.talks .talk .text {
   display: inline-block;
   vertical-align: bottom;
 }
 
-.meetings .meeting .text a{
+.talks .talk .text a{
   text-decoration: none;
 }
 
@@ -624,18 +624,18 @@ nav li a:hover {
   display: none;
 }
 
-.checkinslist { margin-top: 20px; }
-.checkinslist h1 { color: #2D8BCF; }
-.checkin h2 {
+.commentslist { margin-top: 20px; }
+.commentslist h1 { color: #2D8BCF; }
+.comment h2 {
   margin: 0;
   padding: 0;
 }
-.checkin .btn {
+.comment .btn {
   padding: 0;
   margin: 0 3px;
 }
 
-.checkinslist h3 { color: #657B83; }
+.commentslist h3 { color: #657B83; }
 
 input.ng-invalid.ng-touched {
   border: 1px solid #DA3637;
@@ -643,6 +643,10 @@ input.ng-invalid.ng-touched {
 
 input.ng-valid.ng-touched {
   border: 1px solid #509D12;
+}
+
+.untouched input.ng-invalid.ng-touched {
+  border: 1px solid #C5C5C5;
 }
 
 .ng-invalid .btn {

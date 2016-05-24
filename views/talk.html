@@ -5,25 +5,18 @@
 
     <div class="textintro">
       <h1>{{ talk.name }}</h1>
-      <p>Fill out this form to check-in or go
-      <a ng-href="#/talks">back to talks</a></p>
+      <p>Fill out this form to comment or
+      <a ng-href="#/talks">go back to talks</a></p>
 
       <p class="error formerror" ng-show="message">{{ message }}</p>
     </div>
 
-    <fieldset>
+    <fieldset class="untouched">
       <input type="text" name="title" placeholder="Title"
-      ng-model="user.title" ng-required="true">
-      <p class="error validationerror"
-      ng-show="myform.title.$invalid && myform.title.$touched">
-      Title required</p>
+      ng-model="user.commentTitle" ng-required="true">
 
       <input type="text" name="comment" placeholder="Comment"
-      ng-model="user.comment" ng-required="true">
-      <p class="error validationerror"
-      ng-show="myform.comment.$invalid && myform.comment.$touched">
-      Comment required</p>
-
+      ng-model="user.commentText" ng-required="true">
     </fieldset>
 
     <button type="submit" class="btn"
@@ -33,7 +26,6 @@
   <div class="card commentslist">
 
     <h1>Comments</h1>
-    <p>Here's a list of your lastest comments</p>
 
     <div class="search cf">
       <h2>Search Comment</h2>
@@ -85,7 +77,8 @@
             </button>
           </div><!-- buttons -->
           <div class="info">
-            <h2>{{ comment.title }} {{ comment.comment }}</h2>
+            <h2>{{ comment.title }}</h2>
+            <p>{{ comment.comment }}</p>
             <div class="date">
               {{ comment.date | date: "MMM d, yy h:mm a" }}
             </div><!-- date -->
@@ -95,18 +88,20 @@
               class="cf"
               ng-submit="addReply(comment, comment.replyText)"
               novalidate>
-              <input type="text" name="replyText" placeholder="What do you think?"
-              ng-model="comment.replyText" ng-required="true">
-              <button type="submit" class="btn" ng-disabled="myform.$invalid">+</button>
+              <span class="untouched">
+                <input type="text" name="replyText" placeholder="What do you think?"
+                ng-model="comment.replyText" ng-required="true">
+              </span>
+              <button type="submit" class="btn" ng-disabled="replyForm.$invalid">+</button>
             </form>
 
             <ul class="awardslist cf">
-              <li class="cf" ng-repeat="(key, reply) in comment.replies">
+              <li class="cf" ng-repeat="reply in comment.replies">
                 <div class="reply">{{ reply.reply }}
                   <div class="buttons">
                     <button class="btn btn-delete award tooltip"
                       ng-show="allowEditReply(reply)"
-                      ng-click="deleteReply(comment.$id, key)">
+                      ng-click="deleteReply(comment.$id, reply.$id)">
                       <span>Delete this reply</span>
                     </button>
                   </div><!-- buttons -->
@@ -118,4 +113,5 @@
       </li>
     </ul>
     </div>
+
 </section>

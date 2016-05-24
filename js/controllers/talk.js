@@ -24,13 +24,14 @@ myApp.controller('TalkController',
     $scope.addComment = function() {
       var data = {
         user: $rootScope.currentUser.$id,
-        title: $scope.user.title,
-        comment: $scope.user.comment,
+        title: $scope.user.commentTitle,
+        comment: $scope.user.commentText,
         date: Firebase.ServerValue.TIMESTAMP
       }; //data
-
+      
       $scope.comments.$add(data).then(function() {
-        console.log('addedComment');
+        $scope.user.commentTitle = "";
+        $scope.user.commentText = "";
       }); //Send data to Firebase
     }; //AddComment
 
@@ -72,7 +73,6 @@ myApp.controller('TalkController',
         date: Firebase.ServerValue.TIMESTAMP
       }; //data
       repliesArray.$add(data).then(function() {
-        console.log('addReply');
       });
     }; //giveReply
 
@@ -83,13 +83,13 @@ myApp.controller('TalkController',
       return false;
     };
 
-    $scope.deleteReply = function(commentId, reply) {
+    $scope.deleteReply = function(commentId, replyid) {
       var refReply = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
         $scope.whichtalk + '/comments/' + commentId +
-        '/replies');
-      var record = $firebaseObject(refReply);
-      record.$remove(reply);
+        '/replies/' + replyid);
+      var reply = $firebaseObject(refReply);
+      reply.$remove();
     }; //deleteReply
 
     $scope.pickRandom = function() {
