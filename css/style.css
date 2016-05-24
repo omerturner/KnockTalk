@@ -409,11 +409,11 @@ fieldset {
   }
 }
 
-ul.awardslist {
+ul.replies {
   margin-top:5px;
 }
 
-ul.awardslist li {
+ul.replies li {
   width: auto;
   padding: 5px 5px 0 10px;
   margin: 2px;
@@ -424,11 +424,11 @@ ul.awardslist li {
   font-family: Lato, 'Helvetica Nueue', Helvetica, Arial, sans-serif;
 }
 
-ul.awardslist li:hover {
+ul.replies li:hover {
   background-color: #F5974E;
 }
 
-ul.awardslist li .btn-delete {
+ul.replies li .btn-delete {
   background-color: transparent;
   background-size: 15px 15px;
   background-position: center 40%;
@@ -436,7 +436,7 @@ ul.awardslist li .btn-delete {
   border: none;
 }
 
-ul.awardslist li .award {
+ul.replies li .reply {
   padding-right: 15px;
 }
 

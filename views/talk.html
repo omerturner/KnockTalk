@@ -1,4 +1,4 @@
-<section class="card checkins">
+<section class="card comments">
   <form name="myform"
     ng-submit="addComment()"
     novalidate>
@@ -63,7 +63,8 @@
     </div><!-- search -->
 
     <ul class="userlist cf">
-      <li ng-class="comment.userState" ng-repeat="comment in comments | orderBy: order:direction | filter: { $id: recordId, $: query }">
+      <li ng-class="comment.userState"
+      ng-repeat="comment in comments | orderBy: order:direction | filter: { $id: recordId, $: query }">
         <div class="comment">
           <div class="buttons">
             <button class="btn btn-delete tooltip"
@@ -95,13 +96,13 @@
               <button type="submit" class="btn" ng-disabled="replyForm.$invalid">+</button>
             </form>
 
-            <ul class="awardslist cf">
-              <li class="cf" ng-repeat="reply in comment.replies">
+            <ul class="replies cf">
+              <li class="cf" ng-repeat="(key, reply) in comment.replies">
                 <div class="reply">{{ reply.reply }}
                   <div class="buttons">
-                    <button class="btn btn-delete award tooltip"
+                    <button class="btn btn-delete reply tooltip"
                       ng-show="allowEditReply(reply)"
-                      ng-click="deleteReply(comment.$id, reply.$id)">
+                      ng-click="deleteReply(comment.$id, key)">
                       <span>Delete this reply</span>
                     </button>
                   </div><!-- buttons -->

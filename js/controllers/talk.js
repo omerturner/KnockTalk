@@ -28,7 +28,7 @@ myApp.controller('TalkController',
         comment: $scope.user.commentText,
         date: Firebase.ServerValue.TIMESTAMP
       }; //data
-      
+
       $scope.comments.$add(data).then(function() {
         $scope.user.commentTitle = "";
         $scope.user.commentText = "";
