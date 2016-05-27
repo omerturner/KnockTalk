@@ -33,7 +33,7 @@ myApp.controller('TalkController',
       }); //Send data to Firebase
     }; //AddOpinion
 
-    $scope.howManyVotes = function(opinion, type) {
+    $scope.howManyOpinionVotes = function(opinion, type) {
       var numOfUps = 0;
       angular.forEach(opinion[type], function(vote) {
             numOfUps++;
@@ -48,24 +48,42 @@ myApp.controller('TalkController',
       return false;
     };
 
+    $scope.vote = function(opinionId, type) {
+      var oppositeType;
+      if (type == 'ups') {
+        oppositeType = 'downs';
+      } else if (type == 'downs'){
+        oppositeType = 'ups';
+      } else {
+        return;
+      }
+      var oppositeRef = new Firebase(FIREBASE_URL + '/talks/' +
+        $scope.whichtalk + '/opinions/' + opinionId + '/' + oppositeType + '/' + $rootScope.currentUser.$id);
+      var opposite = $firebaseObject(oppositeRef);
+      opposite.$remove($rootScope.currentUser.$id);
+
+      var refVoter = new Firebase(FIREBASE_URL + '/talks/' +
+        $scope.whichtalk + '/opinions/' + opinionId + '/' + type + '/' + $rootScope.currentUser.$id);
+      var voter = $firebaseObject(refVoter);
+      voter.user = $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname;
+      voter.date = Firebase.ServerValue.TIMESTAMP;
+      voter.$save();
+    };//vote
+
+    $scope.isVoted = function(votesArray) {
+      if (votesArray) {
+        return $rootScope.currentUser.$id in votesArray;
+      } else {
+        return false;
+      }
+    };
+
     $scope.deleteOpinion = function(id) {
       var refDel = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + id);
       var record = $firebaseObject(refDel);
       record.$remove(id);
     };
-
-    $scope.vote = function(opinionId, type) {
-      var refVotes = new Firebase(FIREBASE_URL + '/talks/' +
-        $scope.whichtalk + '/opinions/' + opinionId + '/' + type);
-      var votesArray = $firebaseArray(refVotes);
-      var data = {
-        user: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname,
-        date: Firebase.ServerValue.TIMESTAMP
-      }; //data
-      votesArray.$add(data).then(function() {
-      });
-    };//vote
 
 
     $scope.showReply = function(myOpinion) {

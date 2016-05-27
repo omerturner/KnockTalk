@@ -1,6 +1,7 @@
   <div class="branding"><a ng-href="#/">angularJS</a></div>
   <ul>
     <li>
+      <a ng-show="currentUser" ng-href="#/user/{{ currentUser.$id }}">Profile</a>
       <a ng-show="currentUser" ng-href="#/talks">Talks
         <span ng-show="howManyTalks" class="badge">
         {{howManyTalks}}</span>

@@ -24,6 +24,15 @@ myApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'views/register.html',
       controller: 'RegistrationController'
     }).
+    when('/user/:uId', {
+      templateUrl: 'views/user.html',
+      controller: 'UserController',
+      resolve: {
+        currentAuth: function(Authentication) {
+          return Authentication.requireAuth();
+        } //current Auth
+      } //resolve
+    }).
     when('/talk/:tId', {
       templateUrl: 'views/talk.html',
       controller: 'TalkController',

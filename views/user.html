@@ -2,10 +2,10 @@
 
   <div ng-include="'views/add_talk.html'"></div>
 
-  <h2>Talks</h2>
-  <div class="talk" ng-repeat="(key, talk) in talks">
+  <h2>Your talks</h2>
+  <div class="talk" ng-repeat="(key, talk) in userTalks">
     <button class="btn btn-delete tooltip"
-      ng-show="allowEditTalk(talk)" ng-click="deleteTalk(key)">
+      ng-click="deleteTalk(key)">
       <span>Delete this talk</span>
     </button>
 

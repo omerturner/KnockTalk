@@ -2,7 +2,7 @@
 
 <div class="search cf">
   <h2>Search Opinion</h2>
-  <input type="text" ng-model="query" placeholder="Search for users">
+  <input type="text" ng-model="query" placeholder="Search for opinions">
 
   <div class="formgroup">
     <span class="label">by: </span>
@@ -50,17 +50,17 @@
           <span>Reply</span>
         </button>
         <button class="btn btn-uparrow tooltip"
-          ng-click="vote(opinion.$id, 'ups')">
+          ng-click="vote(opinion.$id, 'ups')" ng-disabled="isVoted(opinion.ups)">
           <span>
             <p ng-repeat="voter in opinion.ups">{{ voter.user }}</p>
-            <p>{{ howManyVotes(opinion, "ups") }}</p>
+            <p>{{ howManyOpinionVotes(opinion, "ups") }}</p>
           </span>
         </button>
         <button class="btn btn-downarrow tooltip"
-          ng-click="vote(opinion.$id, 'downs')">
+          ng-click="vote(opinion.$id, 'downs')"  ng-disabled="isVoted(opinion.downs)">
           <span>
             <p ng-repeat="voter in opinion.downs">{{ voter.user }}</p>
-            <p>{{ howManyVotes(opinion, "downs") }}</p>
+            <p>{{ howManyOpinionVotes(opinion, "downs") }}</p>
           </span>
         </button>
       </div><!-- buttons -->

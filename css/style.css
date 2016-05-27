@@ -659,3 +659,12 @@ input.ng-valid.ng-touched {
   color: red;
   padding-bottom: 10px;
 }
+
+.btn-uparrow:hover {
+  background-color: green;
+}
+
+.btn-uparrow:disabled,
+.btn-downarrow:disabled {
+  background-color: gray;
+}

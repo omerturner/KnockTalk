@@ -1,0 +1,20 @@
+<div class="textintro">
+  <h1>Add a Talk</h1>
+  <p>Type a talk name and hit +</p>
+</div><!-- textintro -->
+
+<form class="formgroup addtalk cf"
+  name="myform"
+  ng-submit="addTalk()"
+  novalidate>
+
+  <div class="inputwrapper">
+    <input type="text" name="talkName"
+    placeholder="Talk name"
+    ng-model="$parent.talkName" ng-required="true">
+  </div>
+
+  <button type="submit" class="btn"
+    ng-disabled="myform.$invalid">+</button>
+
+</form>

@@ -1,4 +1,4 @@
-myApp.controller('TalksController',
+myApp.controller('UserController',
   ['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', 'FIREBASE_URL',
   function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, FIREBASE_URL) {
 
@@ -24,7 +24,6 @@ myApp.controller('TalksController',
         });
 
         $scope.addTalk = function() {
-          console.dir($scope);
           var currDate = Firebase.ServerValue.TIMESTAMP;
           talksInfo.$add({
             createdBy: $rootScope.currentUser.$id,
@@ -55,6 +54,6 @@ myApp.controller('TalksController',
           }); // Delete talk from global talks
         }; // Delete talk from user talks
 
-      } // User Authenticated
+        } // User Authenticated
     }); // on Auth
 }]); //Controller
