@@ -11,59 +11,80 @@ myApp.controller('TalkController',
 
     var ref = new Firebase(FIREBASE_URL + 'users/' +
       $scope.whichuser + '/talks/' +
-      $scope.whichtalk + '/comments');
+      $scope.whichtalk + '/opinions');
 
-    var comments = $firebaseArray(ref);
-    $scope.comments = comments;
+    var opinions = $firebaseArray(ref);
+    $scope.opinions = opinions;
+
+    $scope.opinions.$loaded().then(function(){
+        angular.forEach($scope.opinions, function(opinion) {
+            console.log(opinion.ups.length);
+        })
+    });
 
     $scope.order = "title";
     $scope.direction = null;
     $scope.query = '';
     $scope.recordId='';
 
-    $scope.addComment = function() {
+    $scope.addOpinion = function() {
       var data = {
         user: $rootScope.currentUser.$id,
-        title: $scope.user.commentTitle,
-        comment: $scope.user.commentText,
+        title: $scope.user.opinionTitle,
+        opinion: $scope.user.opinionText,
         date: Firebase.ServerValue.TIMESTAMP
       }; //data
 
-      $scope.comments.$add(data).then(function() {
-        $scope.user.commentTitle = "";
-        $scope.user.commentText = "";
+      $scope.opinions.$add(data).then(function() {
+        $scope.user.opinionTitle = "";
+        $scope.user.opinionText = "";
       }); //Send data to Firebase
-    }; //AddComment
+    }; //AddOpinion
 
-    $scope.allowEditComment = function (comment) {
-      if ((comment.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)) {
+    $scope.allowEditOpinion = function (opinion) {
+      if ((opinion.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)) {
         return true;
       }
       return false;
     };
 
-    $scope.deleteComment = function(id) {
+    $scope.deleteOpinion = function(id) {
       var refDel = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
-        $scope.whichtalk + '/comments/' + id);
+        $scope.whichtalk + '/opinions/' + id);
       var record = $firebaseObject(refDel);
       record.$remove(id);
     };
 
-    $scope.showReply = function(myComment) {
-      myComment.show = !myComment.show;
+    $scope.upOpinion = function(opinionId) {
+      var refUps = new Firebase(FIREBASE_URL + 'users/' +
+        $scope.whichuser + '/talks/' +
+        $scope.whichtalk + '/opinions/' + opinionId +
+        '/ups');
+      var upsArray = $firebaseArray(refUps);
+      var data = {
+        user: $rootScope.currentUser.$id,
+        date: Firebase.ServerValue.TIMESTAMP
+      }; //data
+      upsArray.$add(data).then(function() {
+      });
+    };//upOpinion
 
-      if (myComment.userState == 'expanded') {
-        myComment.userState = '';
+
+    $scope.showReply = function(myOpinion) {
+      myOpinion.show = !myOpinion.show;
+
+      if (myOpinion.userState == 'expanded') {
+        myOpinion.userState = '';
       } else {
-        myComment.userState = 'expanded';
+        myOpinion.userState = 'expanded';
       }
     }; // show love
 
-    $scope.addReply = function(comment, replyText) {
+    $scope.addReply = function(opinion, replyText) {
       var refReply = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
-        $scope.whichtalk + '/comments/' + comment.$id +
+        $scope.whichtalk + '/opinions/' + opinion.$id +
         '/replies');
       var repliesArray = $firebaseArray(refReply);
 
@@ -83,18 +104,18 @@ myApp.controller('TalkController',
       return false;
     };
 
-    $scope.deleteReply = function(commentId, replyid) {
+    $scope.deleteReply = function(opinionId, replyid) {
       var refReply = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
-        $scope.whichtalk + '/comments/' + commentId +
+        $scope.whichtalk + '/opinions/' + opinionId +
         '/replies/' + replyid);
       var reply = $firebaseObject(refReply);
       reply.$remove();
     }; //deleteReply
 
     $scope.pickRandom = function() {
-      var whichRecord = Math.round(Math.random()* (comments.length - 1));
-      $scope.recordId = comments.$keyAt(whichRecord);
+      var whichRecord = Math.round(Math.random()* (opinions.length - 1));
+      $scope.recordId = opinions.$keyAt(whichRecord);
     }; //pick winner
 
 }]); //Controller

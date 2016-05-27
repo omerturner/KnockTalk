@@ -230,11 +230,13 @@ input[type=radio] {
 }
 
 .btn-list { background-image: url(../images/icons/icon_list.png); }
-.btn-comment { background-color: #859835; background-image: url(../images/icons/icon_checkmark.png); }
+.btn-opinion { background-color: #859835; background-image: url(../images/icons/icon_checkmark.png); }
 .btn-delete { background-color: #C94C24; background-image: url(../images/icons/icon_trash.png); }
 .btn-love { background-image: url(../images/icons/icon_heart.png); }
 .btn-email { background-image: url(../images/icons/icon_email.png); }
 .btn-talk { background-image:  url(../images/icons/icon_meeting.png); }
+.btn-uparrow { background-image:  url(../images/icons/icon_uparrow.png); }
+.btn-downarrow { background-image:  url(../images/icons/icon_downarrow.png); }
 
 .btn-pick {
   background: #2D8BCF url(../images/icons/icon_dice.png) 5px center no-repeat;
@@ -624,18 +626,18 @@ nav li a:hover {
   display: none;
 }
 
-.commentslist { margin-top: 20px; }
-.commentslist h1 { color: #2D8BCF; }
-.comment h2 {
+.opinionslist { margin-top: 20px; }
+.opinionslist h1 { color: #2D8BCF; }
+.opinion h2 {
   margin: 0;
   padding: 0;
 }
-.comment .btn {
+.opinion .btn {
   padding: 0;
   margin: 0 3px;
 }
 
-.commentslist h3 { color: #657B83; }
+.opinionslist h3 { color: #657B83; }
 
 input.ng-invalid.ng-touched {
   border: 1px solid #DA3637;
