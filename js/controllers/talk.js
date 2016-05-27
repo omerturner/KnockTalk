@@ -2,15 +2,13 @@ myApp.controller('TalkController',
   ['$scope', '$rootScope', '$location', '$firebaseObject', '$firebaseArray','$routeParams', 'FIREBASE_URL',
   function($scope, $rootScope, $location, $firebaseObject, $firebaseArray, $routeParams, FIREBASE_URL) {
 
-    $scope.whichtalk = $routeParams.mId;
+    $scope.whichtalk = $routeParams.tId;
     $scope.whichuser = $routeParams.uId;
 
-    var talkRef = new Firebase(FIREBASE_URL + 'users/' +
-      $scope.whichuser + '/talks/' + $scope.whichtalk);
+    var talkRef = new Firebase(FIREBASE_URL + '/talks/' + $scope.whichtalk);
     $scope.talk = $firebaseObject(talkRef);
 
-    var ref = new Firebase(FIREBASE_URL + 'users/' +
-      $scope.whichuser + '/talks/' +
+    var ref = new Firebase(FIREBASE_URL + '/talks/' +
       $scope.whichtalk + '/opinions');
 
     var opinions = $firebaseArray(ref);
@@ -44,23 +42,21 @@ myApp.controller('TalkController',
     };
 
     $scope.allowEditOpinion = function (opinion) {
-      if ((opinion.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)) {
+      if ((opinion.user == $rootScope.currentUser.$id) || ($scope.talk.createdBy == $rootScope.currentUser.$id)) {
         return true;
       }
       return false;
     };
 
     $scope.deleteOpinion = function(id) {
-      var refDel = new Firebase(FIREBASE_URL + 'users/' +
-        $scope.whichuser + '/talks/' +
+      var refDel = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + id);
       var record = $firebaseObject(refDel);
       record.$remove(id);
     };
 
     $scope.vote = function(opinionId, type) {
-      var refVotes = new Firebase(FIREBASE_URL + 'users/' +
-        $scope.whichuser + '/talks/' +
+      var refVotes = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + opinionId + '/' + type);
       var votesArray = $firebaseArray(refVotes);
       var data = {
@@ -83,8 +79,7 @@ myApp.controller('TalkController',
     }; // show love
 
     $scope.addReply = function(opinion, replyText) {
-      var refReply = new Firebase(FIREBASE_URL + 'users/' +
-        $scope.whichuser + '/talks/' +
+      var refReply = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + opinion.$id +
         '/replies');
       var repliesArray = $firebaseArray(refReply);
@@ -99,15 +94,14 @@ myApp.controller('TalkController',
     }; //giveReply
 
     $scope.allowEditReply = function (reply) {
-      if ((reply.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)){
+      if ((reply.user == $rootScope.currentUser.$id) || ($scope.talk.createdBy == $rootScope.currentUser.$id)){
         return true;
       }
       return false;
     };
 
     $scope.deleteReply = function(opinionId, replyid) {
-      var refReply = new Firebase(FIREBASE_URL + 'users/' +
-        $scope.whichuser + '/talks/' +
+      var refReply = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + opinionId +
         '/replies/' + replyid);
       var reply = $firebaseObject(refReply);

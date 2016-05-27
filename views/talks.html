@@ -22,14 +22,14 @@
   </form>
 
   <h2>Your talks</h2>
-  <div class="talk" ng-repeat="(key, talk) in talks">
+  <div class="talk" ng-repeat="(key, talk) in userTalks">
     <button class="btn btn-delete tooltip"
       ng-click="deleteTalk(key)">
       <span>Delete this talk</span>
     </button>
 
     <a class="btn tooltip"
-      href="#/talk/{{currentUser.regUser}}/{{talk.$id}}">
+      href="#/talk/{{talk.$id}}">
       <span>View Talk</span>
       {{talk.name}}
     </a>

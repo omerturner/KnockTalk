@@ -24,7 +24,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'views/register.html',
       controller: 'RegistrationController'
     }).
-    when('/talk/:uId/:mId', {
+    when('/talk/:tId', {
       templateUrl: 'views/talk.html',
       controller: 'TalkController',
       resolve: {
