@@ -16,12 +16,6 @@ myApp.controller('TalkController',
     var opinions = $firebaseArray(ref);
     $scope.opinions = opinions;
 
-    $scope.opinions.$loaded().then(function(){
-        angular.forEach($scope.opinions, function(opinion) {
-            console.log(opinion.ups.length);
-        })
-    });
-
     $scope.order = "title";
     $scope.direction = null;
     $scope.query = '';
@@ -41,6 +35,14 @@ myApp.controller('TalkController',
       }); //Send data to Firebase
     }; //AddOpinion
 
+    $scope.howManyVotes = function(opinion, type) {
+      var numOfUps = 0;
+      angular.forEach(opinion[type], function(vote) {
+            numOfUps++;
+      });
+      return numOfUps;
+    };
+
     $scope.allowEditOpinion = function (opinion) {
       if ((opinion.user == $rootScope.currentUser.$id) || ($scope.whichuser == $rootScope.currentUser.$id)) {
         return true;
@@ -56,19 +58,18 @@ myApp.controller('TalkController',
       record.$remove(id);
     };
 
-    $scope.upOpinion = function(opinionId) {
-      var refUps = new Firebase(FIREBASE_URL + 'users/' +
+    $scope.vote = function(opinionId, type) {
+      var refVotes = new Firebase(FIREBASE_URL + 'users/' +
         $scope.whichuser + '/talks/' +
-        $scope.whichtalk + '/opinions/' + opinionId +
-        '/ups');
-      var upsArray = $firebaseArray(refUps);
+        $scope.whichtalk + '/opinions/' + opinionId + '/' + type);
+      var votesArray = $firebaseArray(refVotes);
       var data = {
-        user: $rootScope.currentUser.$id,
+        user: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname,
         date: Firebase.ServerValue.TIMESTAMP
       }; //data
-      upsArray.$add(data).then(function() {
+      votesArray.$add(data).then(function() {
       });
-    };//upOpinion
+    };//vote
 
 
     $scope.showReply = function(myOpinion) {

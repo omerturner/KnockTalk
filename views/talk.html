@@ -76,12 +76,18 @@
               <span>Reply</span>
             </button>
             <button class="btn btn-uparrow tooltip"
-              ng-click="upOpinion(opinion.$id)">
-              <span>{{ opinion.ups }}</span>
+              ng-click="vote(opinion.$id, 'ups')">
+              <span>
+                <p ng-repeat="voter in opinion.ups">{{ voter.user }}</p>
+                <p>{{ howManyVotes(opinion, "ups") }}</p>
+              </span>
             </button>
             <button class="btn btn-downarrow tooltip"
-              ng-click="downOpinion(opinion.$id)">
-              <span>{{ opinion.downs }}</span>
+              ng-click="vote(opinion.$id, 'downs')">
+              <span>
+                <p ng-repeat="voter in opinion.downs">{{ voter.user }}</p>
+                <p>{{ howManyVotes(opinion, "downs") }}</p>
+              </span>
             </button>
           </div><!-- buttons -->
           <div class="info">
