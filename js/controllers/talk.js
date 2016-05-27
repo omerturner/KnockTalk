@@ -3,7 +3,6 @@ myApp.controller('TalkController',
   function($scope, $rootScope, $location, $firebaseObject, $firebaseArray, $routeParams, FIREBASE_URL) {
 
     $scope.whichtalk = $routeParams.tId;
-    $scope.whichuser = $routeParams.uId;
 
     var talkRef = new Firebase(FIREBASE_URL + '/talks/' + $scope.whichtalk);
     $scope.talk = $firebaseObject(talkRef);
@@ -22,6 +21,7 @@ myApp.controller('TalkController',
     $scope.addOpinion = function() {
       var data = {
         user: $rootScope.currentUser.$id,
+        username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname,
         title: $scope.user.opinionTitle,
         opinion: $scope.user.opinionText,
         date: Firebase.ServerValue.TIMESTAMP
@@ -104,6 +104,7 @@ myApp.controller('TalkController',
 
       var data = {
         user: $rootScope.currentUser.$id,
+        username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname,
         reply: replyText,
         date: Firebase.ServerValue.TIMESTAMP
       }; //data
@@ -125,10 +126,5 @@ myApp.controller('TalkController',
       var reply = $firebaseObject(refReply);
       reply.$remove();
     }; //deleteReply
-
-    $scope.pickRandom = function() {
-      var whichRecord = Math.round(Math.random()* (opinions.length - 1));
-      $scope.recordId = opinions.$keyAt(whichRecord);
-    }; //pick winner
 
 }]); //Controller
