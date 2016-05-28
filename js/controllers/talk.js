@@ -13,7 +13,7 @@ myApp.controller('TalkController',
     var opinions = $firebaseArray(ref);
     $scope.opinions = opinions;
 
-    $scope.order = "title";
+    $scope.order = "createdAt";
     $scope.direction = null;
     $scope.query = '';
     $scope.recordId='';
