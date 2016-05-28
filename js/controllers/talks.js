@@ -27,15 +27,18 @@ myApp.controller('TalksController',
           console.dir($scope);
           var currDate = Firebase.ServerValue.TIMESTAMP;
           talksInfo.$add({
-            createdBy: $rootScope.currentUser.$id,
+            createdBy: {
+              uid: $rootScope.currentUser.$id,
+              username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname
+            },
             name: $scope.talkName,
-            date: currDate
+            createdAt: currDate
           }).then(function(talk) {
             var userTalkRef = new Firebase(FIREBASE_URL + 'users/' +
                                           $rootScope.currentUser.$id + '/talks/' + talk.key());
             var userTalk = $firebaseObject(userTalkRef);
             userTalk.name = $scope.talkName;
-            userTalk.date = currDate;
+            userTalk.createdAt = currDate;
             userTalk.$save().then(function() {
               $scope.talkName='';
             }); //user promise
@@ -43,10 +46,7 @@ myApp.controller('TalksController',
         }; // addTalk
 
         $scope.allowEditTalk = function(talk) {
-          if (talk.createdBy == $rootScope.currentUser.$id) {
-            return true;
-          }
-          return false;
+          return (talk.createdBy.uid == $rootScope.currentUser.$id);
         };
 
         $scope.deleteTalk = function(key) {

@@ -25,4 +25,15 @@
     </a>
   </div>
 
+  <h2>Opinions</h2>
+  <div class="talk" ng-repeat="(key, opinion) in userOpinions">
+    <button class="btn btn-delete tooltip"
+      ng-show="allowEditUser()" ng-click="deleteOpinion(key)">
+      <span>Delete this opinion</span>
+    </button>
+
+    <p>{{opinion.text}}</p>
+
+  </div>
+
 </div><!-- talks cf -->

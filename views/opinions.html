@@ -62,7 +62,8 @@
         <h2>{{ opinion.title }}</h2>
         <p>{{ opinion.opinion }}</p>
         <div class="date">
-          <a ng-href="#/user/{{opinion.user}}">{{ opinion.username }}</a>  |  {{ opinion.date | date: "MMM d, yy h:mm a" }}
+          <a ng-href="#/user/{{opinion.createdBy.uid}}">
+          {{ opinion.createdBy.username }}</a>  |  {{ opinion.createdAt | date: "MMM d, yy h:mm a" }}
         </div><!-- date -->
       </div><!-- info -->
       <div class="showopinions" ng-show="opinion.show">
@@ -80,8 +81,9 @@
         <ul class="replies cf">
           <li class="cf" ng-repeat="(key, reply) in opinion.replies">
             <div class="reply">
-              <p>{{ reply.reply }}</p>
-              <a ng-href="#/user/{{reply.user}}">{{ reply.username }}</a>  |  {{ reply.date | date: "MMM d, yy h:mm a" }}
+              <p>{{ reply.text }}</p>
+              <a ng-href="#/user/{{reply.createdBy.uid}}">
+              {{ reply.createdBy.username }}</a>  |  {{ reply.createdAt | date: "MMM d, yy h:mm a" }}
               <div class="buttons">
                 <button class="btn btn-delete reply tooltip"
                   ng-show="allowEditReply(reply)"

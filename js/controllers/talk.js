@@ -19,19 +19,48 @@ myApp.controller('TalkController',
     $scope.recordId='';
 
     $scope.addOpinion = function() {
-      var data = {
-        user: $rootScope.currentUser.$id,
-        username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname,
+      var currDate = Firebase.ServerValue.TIMESTAMP;
+      var relatedTalk = {
+        tid: $scope.whichtalk,
+        talkName: $scope.talk.name
+      };
+      var createdBy = {
+        uid: $rootScope.currentUser.$id,
+        username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname
+      }
+      var opinionsRef = new Firebase(FIREBASE_URL + '/opinions/');
+      var globalOpinions = $firebaseArray(opinionsRef);
+      var globalOpinion = {
         title: $scope.user.opinionTitle,
-        opinion: $scope.user.opinionText,
-        date: Firebase.ServerValue.TIMESTAMP
+        text: $scope.user.opinionText,
+        relatedTalk: relatedTalk,
+        createdBy: createdBy,
+        createdAt: currDate
       }; //data
 
-      $scope.opinions.$add(data).then(function() {
-        $scope.user.opinionTitle = "";
-        $scope.user.opinionText = "";
-      }); //Send data to Firebase
-    }; //AddOpinion
+      globalOpinions.$add(globalOpinion).then(function(opinion) {
+        var talkOpinionRef = new Firebase(FIREBASE_URL + '/talks/' + $scope.whichtalk +
+                                                                                              '/opinions/' + opinion.key());
+        var talkOpinion = $firebaseObject(talkOpinionRef);
+        talkOpinion.title = $scope.user.opinionTitle;
+        talkOpinion.text = $scope.user.opinionText;
+        talkOpinion.createdBy = createdBy;
+        talkOpinion.createdAt = currDate;
+        talkOpinion.$save(talkOpinion).then(function(opinion) {
+            var userOpinionRef = new Firebase(FIREBASE_URL + 'users/' +
+                                          $rootScope.currentUser.$id + '/opinions/' + opinion.key());
+            var userOpinion = $firebaseObject(userOpinionRef);
+            userOpinion.relatedTalk = relatedTalk;
+            userOpinion.title = $scope.user.opinionTitle;
+            userOpinion.text = $scope.user.opinionText;
+            userOpinion.createdAt = currDate;
+            userOpinion.$save().then(function(opinion) {
+              $scope.user.opinionTitle = "";
+              $scope.user.opinionText = "";
+            }); // User opinions promise
+          }); // Talk opinions promise
+      }); // Global opinions promis
+    }; //Add Opinion
 
     $scope.howManyOpinionVotes = function(opinion, type) {
       var numOfUps = 0;
@@ -42,10 +71,8 @@ myApp.controller('TalkController',
     };
 
     $scope.allowEditOpinion = function (opinion) {
-      if ((opinion.user == $rootScope.currentUser.$id) || ($scope.talk.createdBy == $rootScope.currentUser.$id)) {
-        return true;
-      }
-      return false;
+      return ((opinion.createdBy.uid == $rootScope.currentUser.$id) ||
+        ($scope.talk.createdBy.uid == $rootScope.currentUser.$id));
     };
 
     $scope.vote = function(opinionId, type) {
@@ -78,12 +105,20 @@ myApp.controller('TalkController',
       }
     };
 
-    $scope.deleteOpinion = function(id) {
-      var refDel = new Firebase(FIREBASE_URL + '/talks/' +
-        $scope.whichtalk + '/opinions/' + id);
-      var record = $firebaseObject(refDel);
-      record.$remove(id);
-    };
+    $scope.deleteOpinion = function(key) {
+      var globalOpinionRef = new Firebase(FIREBASE_URL + '/opinions/' + key);
+      var globalOpinion = $firebaseObject(globalOpinionRef);
+      globalOpinion.$remove().then(function() {
+        var talkOpinionRef = new Firebase(FIREBASE_URL + '/talks/' + $scope.whichtalk + '/opinions/'  + key);
+        var talkOpinion = $firebaseObject(talkOpinionRef);
+        talkOpinion.$remove().then(function() {
+          var userOpinionRef = new Firebase(FIREBASE_URL + 'users/' +
+                                               $rootScope.currentUser.$id + '/opinions/' + key);
+          var userOpinion = $firebaseObject(userOpinionRef);
+          userOpinion.$remove();
+        }); // Remove from global opinions
+      }); // Remove from talk opinions
+    }; // Remove from user opinions
 
 
     $scope.showReply = function(myOpinion) {
@@ -103,20 +138,20 @@ myApp.controller('TalkController',
       var repliesArray = $firebaseArray(refReply);
 
       var data = {
-        user: $rootScope.currentUser.$id,
-        username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname,
-        reply: replyText,
-        date: Firebase.ServerValue.TIMESTAMP
+        createdBy: {
+          uid: $rootScope.currentUser.$id,
+          username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname
+        },
+        text: replyText,
+        createdAt: Firebase.ServerValue.TIMESTAMP
       }; //data
       repliesArray.$add(data).then(function() {
       });
     }; //giveReply
 
     $scope.allowEditReply = function (reply) {
-      if ((reply.user == $rootScope.currentUser.$id) || ($scope.talk.createdBy == $rootScope.currentUser.$id)){
-        return true;
-      }
-      return false;
+      return ((reply.createdBy.uid == $rootScope.currentUser.$id) ||
+        ($scope.talk.createdBy.uid == $rootScope.currentUser.$id));
     };
 
     $scope.deleteReply = function(opinionId, replyid) {

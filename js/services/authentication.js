@@ -46,7 +46,7 @@ myApp.factory('Authentication',
 
         var regRef = new Firebase(FIREBASE_URL + 'users')
         .child(regUser.uid).set({
-          date: Firebase.ServerValue.TIMESTAMP,
+          createdAt: Firebase.ServerValue.TIMESTAMP,
           regUser: regUser.uid,
           firstname: user.firstname,
           lastname: user.lastname,

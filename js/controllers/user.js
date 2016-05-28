@@ -21,40 +21,47 @@ myApp.controller('UserController',
         var userTalks = $firebaseArray(userTalksRef);
         $scope.userTalks = userTalks;
 
+        var userOpinionsRef = new Firebase(FIREBASE_URL + 'users/' + $scope.whichuser + '/opinions');
+        var userOpinions = $firebaseArray(userOpinionsRef);
+        $scope.userOpinions = userOpinions;
+
         $scope.allowEditUser = function() {
           return $scope.whichuser == $rootScope.currentUser.$id;
         };
 
         if ($scope.allowEditUser()) {
           $scope.addTalk = function() {
-            var currDate = Firebase.ServerValue.TIMESTAMP;
-            talksInfo.$add({
-              createdBy: $rootScope.currentUser.$id,
-              name: $scope.talkName,
-              date: currDate
-            }).then(function(talk) {
-              var userTalkRef = new Firebase(FIREBASE_URL + 'users/' +
-                                            $rootScope.currentUser.$id + '/talks/' + talk.key());
-              var userTalk = $firebaseObject(userTalkRef);
-              userTalk.name = $scope.talkName;
-              userTalk.date = currDate;
-              userTalk.$save().then(function() {
-                $scope.talkName='';
-              }); //user promise
-            }); //talks promise
-          }; // addTalk
+          console.dir($scope);
+          var currDate = Firebase.ServerValue.TIMESTAMP;
+          talksInfo.$add({
+            createdBy: {
+              uid: $rootScope.currentUser.$id,
+              username: $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname
+            },
+            name: $scope.talkName,
+            createdAt: currDate
+          }).then(function(talk) {
+            var userTalkRef = new Firebase(FIREBASE_URL + 'users/' +
+                                          $rootScope.currentUser.$id + '/talks/' + talk.key());
+            var userTalk = $firebaseObject(userTalkRef);
+            userTalk.name = $scope.talkName;
+            userTalk.createdAt = currDate;
+            userTalk.$save().then(function() {
+              $scope.talkName='';
+            }); //user promise
+          }); //talks promise
+        }; // addTalk
 
-          $scope.allowEditTalk = function(talk) {
-            if (talk.createdBy == $rootScope.currentUser.$id) {
-              return true;
-            }
-            return false;
-          };
+        $scope.allowEditTalk = function(talk) {
+          return (talk.createdBy.uid == $rootScope.currentUser.$id);
+        };
 
           $scope.deleteTalk = function(key) {
             userTalks.$remove(key).then(function() {
-              talksInfo.$remove(key);
-            }); // Delete talk from global talks
+
+            }).then(function() {
+                talksInfo.$remove(key);
+              }); // Delete talk from global talks
           }; // Delete talk from user talks
 
         } // If allow edit
