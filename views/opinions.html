@@ -43,7 +43,7 @@
           ng-click="vote(opinion.$id, 'ups')" ng-disabled="isVoted(opinion.ups)">
           <span>
             <p ng-repeat="(key, voter) in opinion.ups">
-              <a ng-href="#/user/{{ key }}">{{ voter.user }}</a>
+              <a ng-href="#/user/{{ key }}">{{ voter.username }}</a>
             </p>
             <p>{{ howManyOpinionVotes(opinion, "ups") }}</p>
           </span>
@@ -52,7 +52,7 @@
           ng-click="vote(opinion.$id, 'downs')"  ng-disabled="isVoted(opinion.downs)">
           <span>
             <p ng-repeat="(key, voter) in opinion.downs">
-              <a ng-href="#/user/{{ key }}">{{ voter.user }}</a>
+              <a ng-href="#/user/{{ key }}">{{ voter.username }}</a>
             </p>
             <p>{{ howManyOpinionVotes(opinion, "downs") }}</p>
           </span>
@@ -60,7 +60,7 @@
       </div><!-- buttons -->
       <div class="info">
         <h2>{{ opinion.title }}</h2>
-        <p>{{ opinion.opinion }}</p>
+        <p>{{ opinion.text }}</p>
         <div class="date">
           <a ng-href="#/user/{{opinion.createdBy.uid}}">
           {{ opinion.createdBy.username }}</a>  |  {{ opinion.createdAt | date: "MMM d, yy h:mm a" }}

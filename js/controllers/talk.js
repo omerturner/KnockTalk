@@ -63,11 +63,11 @@ myApp.controller('TalkController',
     }; //Add Opinion
 
     $scope.howManyOpinionVotes = function(opinion, type) {
-      var numOfUps = 0;
+      var numOfVotes = 0;
       angular.forEach(opinion[type], function(vote) {
-            numOfUps++;
+            numOfVotes++;
       });
-      return numOfUps;
+      return numOfVotes;
     };
 
     $scope.allowEditOpinion = function (opinion) {
@@ -92,8 +92,8 @@ myApp.controller('TalkController',
       var refVoter = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + opinionId + '/' + type + '/' + $rootScope.currentUser.$id);
       var voter = $firebaseObject(refVoter);
-      voter.user = $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname;
-      voter.date = Firebase.ServerValue.TIMESTAMP;
+      voter.username = $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname;
+      voter.createdAt = Firebase.ServerValue.TIMESTAMP;
       voter.$save();
     };//vote
 

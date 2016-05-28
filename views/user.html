@@ -33,6 +33,9 @@
     </button>
 
     <p>{{opinion.text}}</p>
+    <p>Posted about the talk
+      <a ng-href="#/talk/{{opinion.relatedTalk.tid}}">{{ opinion.relatedTalk.talkName }}</a>
+    </p>
 
   </div>
 
