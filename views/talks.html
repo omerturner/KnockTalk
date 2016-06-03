@@ -15,6 +15,7 @@
       {{talk.name}}
     </a>
     <p>Posted by {{ talk.createdBy.username }}</p>
+    <p>on {{ talk.createdAt | date: "MMM d, yy h:mm a" }}</p>
   </div>
 
 </div><!-- talks cf -->

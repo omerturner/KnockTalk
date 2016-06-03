@@ -665,7 +665,6 @@ input.ng-valid.ng-touched {
   background-color: green;
 }
 
-.btn-uparrow:disabled,
-.btn-downarrow:disabled {
+.voted {
   background-color: gray;
 }

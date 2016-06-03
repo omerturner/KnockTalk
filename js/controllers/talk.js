@@ -76,6 +76,7 @@ myApp.controller('TalkController',
     };
 
     $scope.vote = function(opinionId, type) {
+      // valitade input and getting the oposite type
       var oppositeType;
       if (type == 'ups') {
         oppositeType = 'downs';
@@ -84,14 +85,28 @@ myApp.controller('TalkController',
       } else {
         return;
       }
+
+      // refering the vote
+      var refVoter = new Firebase(FIREBASE_URL + '/talks/' +
+        $scope.whichtalk + '/opinions/' + opinionId + '/' + type + '/' + $rootScope.currentUser.$id);
+      var voter = $firebaseObject(refVoter);
+
+      // undo vote if already voted
+      var currentOpinion = $scope.opinions.filter(function( obj ) {
+        return obj.$id == opinionId;
+      });
+      if ($scope.isVoted(currentOpinion[0][type])) {
+        voter.$remove($rootScope.currentUser.$id);
+        return;
+      }
+
+      // remove vote from oposite type
       var oppositeRef = new Firebase(FIREBASE_URL + '/talks/' +
         $scope.whichtalk + '/opinions/' + opinionId + '/' + oppositeType + '/' + $rootScope.currentUser.$id);
       var opposite = $firebaseObject(oppositeRef);
       opposite.$remove($rootScope.currentUser.$id);
 
-      var refVoter = new Firebase(FIREBASE_URL + '/talks/' +
-        $scope.whichtalk + '/opinions/' + opinionId + '/' + type + '/' + $rootScope.currentUser.$id);
-      var voter = $firebaseObject(refVoter);
+      // prepare vote object and save
       voter.username = $rootScope.currentUser.firstname + ' ' + $rootScope.currentUser.lastname;
       voter.createdAt = Firebase.ServerValue.TIMESTAMP;
       voter.$save();

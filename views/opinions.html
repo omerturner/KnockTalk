@@ -40,7 +40,7 @@
           <span>Reply</span>
         </button>
         <button class="btn btn-uparrow tooltip"
-          ng-click="vote(opinion.$id, 'ups')" ng-disabled="isVoted(opinion.ups)">
+          ng-click="vote(opinion.$id, 'ups')" ng-class="{voted: isVoted(opinion.ups)}">
           <span>
             <p ng-repeat="(key, voter) in opinion.ups">
               <a ng-href="#/user/{{ key }}">{{ voter.username }}</a>
@@ -49,7 +49,7 @@
           </span>
         </button>
         <button class="btn btn-downarrow tooltip"
-          ng-click="vote(opinion.$id, 'downs')"  ng-disabled="isVoted(opinion.downs)">
+          ng-click="vote(opinion.$id, 'downs')"  ng-class="{voted: isVoted(opinion.downs)}">
           <span>
             <p ng-repeat="(key, voter) in opinion.downs">
               <a ng-href="#/user/{{ key }}">{{ voter.username }}</a>
